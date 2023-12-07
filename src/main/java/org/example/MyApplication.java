@@ -1,0 +1,28 @@
+/*
+ * Copyright (C) 2012-23 Dobility, Inc.
+ *
+ * All rights reserved.
+ */
+
+package com.surveycto.gateway;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.util.Locale;
+import java.util.TimeZone;
+
+@SpringBootApplication
+public class MyApplication {
+
+	public static void main(String[] args) {
+		// Set the JVM timezone to UTC
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+
+		// Set the default locale to be US.
+		Locale.setDefault(Locale.US);
+
+		// Start the app
+		SpringApplication.run(MyApplication.class, args);
+	}
+}

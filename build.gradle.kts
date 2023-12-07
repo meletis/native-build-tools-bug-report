@@ -1,6 +1,9 @@
 plugins {
     id("java")
     id("application")
+    id("org.springframework.boot") version "3.2.0"
+    id("io.spring.dependency-management") version "1.1.4"
+    id("org.hibernate.orm") version "6.3.1.Final" // Upgrade hibernate plugin version when upgrading spring boot
     id("org.graalvm.buildtools.native") version "0.9.28"
 }
 
@@ -15,43 +18,56 @@ repositories {
     mavenCentral()
 }
 
+val springCloudVersion = "2023.0.0"
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
+    }
+}
+
 dependencies {
+    implementation("org.springframework.cloud:spring-cloud-starter-gateway")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    
     // Test containers dependencies
-    testImplementation(platform("org.testcontainers:testcontainers-bom:1.19.1"))
-    testImplementation("org.testcontainers:mysql:1.19.1")
-    testImplementation("org.testcontainers:junit-jupiter:1.19.1")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-testcontainers")
+    
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
+    testImplementation(platform("org.testcontainers:testcontainers-bom:1.19.3"))
+    testImplementation("org.testcontainers:mysql:1.19.3")
+    testImplementation("org.testcontainers:junit-jupiter:1.19.3")
 
-    testRuntimeOnly("com.mysql:mysql-connector-j:8.0.33")
+    testRuntimeOnly("com.mysql:mysql-connector-j:8.2.0")
 }
 
 tasks.test {
     useJUnitPlatform()
 }
 
-// Conditionally apply the GraalVM native image plugin
-gradle.taskGraph.whenReady {
-    if (gradle.taskGraph.hasTask(":nativeCompile") or gradle.taskGraph.hasTask(":nativeTest")) {
-        apply(plugin = "org.graalvm.buildtools.native")
+application {
+    mainClass.set("org.example.MyApplication")
+}
 
-        application {
-            mainClass.set("com.example.TestApp")
-        }
+// Configure the GraalVM native image plugin settings
+graalvmNative {
+    binaries.all {
+        resources.autodetect()
+    }
 
-        // Configure the GraalVM native image plugin settings
-        graalvmNative {
-            binaries.all {
-                resources.autodetect()
-            }
+    // We need this, otherwise testcontainers suffer from this:
+    // https://github.com/oracle/graalvm-reachability-metadata/pull/301
+    metadataRepository {
+        enabled.set(true)
+    }
 
-            // We need this, otherwise testcontainers suffer from this:
-            // https://github.com/oracle/graalvm-reachability-metadata/pull/301
-            metadataRepository {
-                enabled.set(true)
-            }
-            
-            toolchainDetection.set(false)
-        }
+    toolchainDetection.set(false)
+}
+
+hibernate {
+    enhancement {
+        enableAssociationManagement.set(true)
     }
 }

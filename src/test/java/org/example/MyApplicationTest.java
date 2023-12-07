@@ -7,7 +7,7 @@ import org.testcontainers.utility.DockerImageName;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MyAppTest {
+public class MyApplicationTest {
 
     private static final MySQLContainer<?> mySQLContainer;
     
