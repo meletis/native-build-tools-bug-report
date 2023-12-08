@@ -4,11 +4,12 @@ plugins {
     id("org.springframework.boot") version "3.2.0"
     id("io.spring.dependency-management") version "1.1.4"
     id("org.hibernate.orm") version "6.3.1.Final" // Upgrade hibernate plugin version when upgrading spring boot
+    id("io.freefair.lombok") version "8.4"
     id("org.graalvm.buildtools.native") version "0.9.28"
 }
 
 group = "org.example"
-version = "1.0-SNAPSHOT"
+version = "1.0.0-SNAPSHOT"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17

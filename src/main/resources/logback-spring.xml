@@ -1,0 +1,28 @@
+<!--
+  ~ Copyright (C) 2012-23 Dobility, Inc.
+  ~
+  ~ All rights reserved.
+  -->
+
+<configuration>
+    <!-- Appender configurations (console, file, etc.) -->
+    <!-- ... -->
+
+    <!-- Root logger -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <springProperty scope="context" name="appName" source="spring.application.name" defaultValue="no app name"/>
+    <springProperty scope="context" name="stackName" source="stack.name" defaultValue="no stack name"/>
+
+    <!-- Custom log pattern -->
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} [${appName}] [${stackName}] %5p --- [%15.15t] %-40.40logger{39} : %m%n"/>
+
+    <!-- Console appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+</configuration>
