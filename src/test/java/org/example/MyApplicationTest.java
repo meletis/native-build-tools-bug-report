@@ -30,11 +30,6 @@ public class MyApplicationTest {
         mySQLContainer.start();
     }
 
-    @AfterAll
-    public static void tearDown() {
-        mySQLContainer.stop();
-    }
-
     @Test
     public void testMySQLContainerIsRunning() {
         assertTrue(mySQLContainer.isRunning());

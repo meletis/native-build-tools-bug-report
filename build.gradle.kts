@@ -20,6 +20,8 @@ repositories {
 }
 
 val springCloudVersion = "2023.0.0"
+val testContainersVersion = "1.19.3"
+val mysqlConnectorVersion = "8.2.0"
 
 dependencyManagement {
     imports {
@@ -28,20 +30,19 @@ dependencyManagement {
 }
 
 dependencies {
-    implementation("org.springframework.cloud:spring-cloud-starter-gateway")
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     
-    // Test containers dependencies
+    // Test dependencies
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
-    
+
+    testImplementation(platform("org.testcontainers:testcontainers-bom:$testContainersVersion"))
+    testImplementation("org.testcontainers:mysql:$testContainersVersion")
+    testImplementation("org.testcontainers:junit-jupiter:$testContainersVersion")
+
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
-    testImplementation(platform("org.testcontainers:testcontainers-bom:1.19.3"))
-    testImplementation("org.testcontainers:mysql:1.19.3")
-    testImplementation("org.testcontainers:junit-jupiter:1.19.3")
-
-    testRuntimeOnly("com.mysql:mysql-connector-j:8.2.0")
+    testRuntimeOnly("com.mysql:mysql-connector-j:$mysqlConnectorVersion")
 }
 
 tasks.test {
