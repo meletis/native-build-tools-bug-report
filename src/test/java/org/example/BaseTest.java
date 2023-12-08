@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @AutoConfigureMockMvc
 @Testcontainers
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public class MyApplicationTest {
+public class BaseTest {
 
     @ServiceConnection
     private static final MySQLContainer<?> mySQLContainer;
